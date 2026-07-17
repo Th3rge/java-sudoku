@@ -1,5 +1,9 @@
 package br.com.dio;
 
+import br.com.dio.model.Board;
+import br.com.dio.model.GameStatusEnum;
+import br.com.dio.model.Space;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,9 +11,6 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import br.com.dio.model.Board;
-import br.com.dio.model.GameStatusEnum;
-import br.com.dio.model.Space;
 public class Main {
     
     private final static Scanner scanner = new Scanner(System.in);
@@ -96,11 +97,11 @@ public class Main {
         }
         
         System.out.println("Digite a coluna (0-8):");
-        var col = runUntilGetValiNumber(0, 8);
+        var col = runUntilGetValidNumber(0, 8);
         System.out.println("Digite a linha (0-8):");
-        var row = runUntilGetValiNumber(0, 8);
+        var row = runUntilGetValidNumber(0, 8);
         System.out.printf("Digite o número que vai entrar na posição (%d, %d) (1-9): ".formatted(col, row));
-        var number = runUntilGetValiNumber(1, 9);
+        var number = runUntilGetValidNumber(1, 9);
         if(board.changeValue(col, row, number)){
             System.out.printf("Número %d inserido na posição (%d, %d) com sucesso.%n".formatted(number, col, row));
         } else {
@@ -119,11 +120,11 @@ public class Main {
         }
 
         System.out.println("Digite a coluna (0-8):");
-        var col = runUntilGetValiNumber(0, 8);
+        var col = runUntilGetValidNumber(0, 8);
         System.out.println("Digite a linha (0-8):");
-        var row = runUntilGetValiNumber(0, 8);
+        var row = runUntilGetValidNumber(0, 8);
         System.out.printf("Digite o número que vai entrar na posição (%d, %d) (1-9): ".formatted(col, row));
-        var number = runUntilGetValiNumber(1, 9);
+        var number = runUntilGetValidNumber(1, 9);
         if(!board.clearValue(col, row)){
             System.out.printf("Número %d removido da posição (%d, %d) com sucesso.%n".formatted(number, col, row));
         } else {
@@ -138,7 +139,14 @@ public class Main {
             return;
         }
         System.out.println("Exibindo tabuleiro atual");
-    }
+
+        var args = new Object[81];
+        var argPos = 0;
+        for (int i = 0; i < BOARD_LIMIT; i++){
+            for (var col : board.getSpaces()){
+                args[argPos++] = " " + ((col.get(i) == null) ? " " : col.get(i).getValue());
+            }}
+        }
 
     private static void showGameStatus() {
         System.out.println("Exibindo status do jogo");
@@ -154,7 +162,10 @@ public class Main {
         System.exit(0);
     }
 
-    private static int runUntilGetValiNumber(final int min, final int max) {
+    
+    
+    
+    private static int runUntilGetValidNumber(final int min, final int max) {
         int current = scanner.nextInt();
         while (current < min || current > max) {
             System.out.printf("Número inválido. Digite um número entre %d e %d: ", min, max);
@@ -162,4 +173,5 @@ public class Main {
         }
         return current;
     }
+
 }
